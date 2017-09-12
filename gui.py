@@ -1,4 +1,4 @@
-from Tkinter import *
+from Tkinter import Tk, Frame, Label, StringVar
 import platform
 
 class Gui:
@@ -13,18 +13,23 @@ class Gui:
             print "Unknown operating system!"
             master.destroy()
 
-        frame = Frame(master)
-        frame.pack()
+        self.frame = Frame(master)
+        self.frame.pack()
 
-        frame.configure(background='black')
-        time_variable = StringVar()
-        time_variable.set("00:00")
+        self.frame.configure(background='black')
+        self.time_variable = StringVar()
 
-        time_label = Label(frame,
-                           textvariable=time_variable,
+        time_label = Label(self.frame,
+                           textvariable=self.time_variable,
                            font=("Helvetica", 30, "bold"),
                            foreground="white",
                            background="black",
                            height=100,
                            width=150)
         time_label.pack()
+
+    def register_callback(self, time_ms, callback):
+        self.frame.after(time_ms, callback)
+
+    def set_time(self, time):
+        self.time_variable.set(time)

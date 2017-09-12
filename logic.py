@@ -8,6 +8,6 @@ class Logic:
         self.update_time()
 
     def update_time(self):
-        self.Gui.frame.after(1000, self.update_time)
+        self.Gui.register_callback(1000, self.update_time)
         time = str(datetime.now().time())[0:5]
-        self.Gui.time_variable.set(time)
+        self.Gui.set_time(time)

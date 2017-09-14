@@ -1,7 +1,7 @@
 # Raspberry Pi Alarm Clock
 This project uses a Raspberry Pi, a small display, some buttons and speakers to create a small, network connected and configurable alarm clock.
 
-##Parts used
+## Parts used
 
 * Raspberry Pi A+
 * USB wifi dongle
@@ -28,7 +28,7 @@ vi ~/.config/lxsession/LXDE-pi/autostart
 @xset s noblank     # don't blank the video device
 ```
 
-Next, load the fbtft_device kernel module. The display uses a chip called st7735, which is supported under the name ```sainsmart18```. Some displays may require setting ```bgr``` to get the colors in the right order. Setting ```txbuflen``` to 32 kB ensures smoother operation. 
+Next, load the fbtft_device kernel module. The display uses a chip called st7735, which is supported under the name ```sainsmart18```. Some displays may require setting ```bgr``` to get the colors in the right order. Setting ```txbuflen``` to 32 kB ensures smoother operation.
 
 ```
 sudo modprobe fbtft_device name=sainsmart18 bgr=1 txbuflen=32768
@@ -66,3 +66,5 @@ Or, for development:
 export DISPLAY=":0"
 nodemon alarm-clock.py
 ```
+
+The script also runs on OS X (without specifying the display).

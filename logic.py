@@ -1,13 +1,32 @@
+"""Module implementing the logic of the Pi Alarm Clock"""
 from datetime import datetime
-import time
 
-class Logic:
-
+class Logic(object):
+    """Class for aalrm clock logic"""
     def __init__(self, gui):
-        self.Gui = gui
+        self.gui = gui
+        self.alarm_time = (6, 0)
+        self.alarm_is_active = False
         self.update_time()
 
+
     def update_time(self):
-        self.Gui.register_callback(1000, self.update_time)
-        time = str(datetime.now().time())[0:5]
-        self.Gui.set_time(time)
+        """Callback used to update current time in the gui"""
+        self.gui.register_callback(1000, self.update_time)
+        time = datetime.now().time()
+        self.gui.set_time(str(time)[0:5])
+        self.check_alarm(time)
+
+    def set_alarm(self, hour, minute):
+        """Functions for setting new alarm time"""
+        self.alarm_time = (hour, minute)
+
+    def check_alarm(self, time):
+        """Check if it is time to start the alarm"""
+        if self.alarm_is_active:
+            return
+
+        if self.alarm_time == (time.hour, time.minute):
+            print "Alarm active"
+            self.alarm_is_active = True
+            self.gui.start_alarm()

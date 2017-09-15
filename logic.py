@@ -2,14 +2,12 @@
 from datetime import datetime
 
 class Logic(object):
-    """Class for aalrm clock logic"""
+    """Class for alarm clock logic"""
     def __init__(self, gui):
         self.gui = gui
         self.set_alarm(6, 0)
         self.alarm_is_active = False
         self.update_time()
-
-
 
     def update_time(self):
         """Callback used to update current time in the gui"""

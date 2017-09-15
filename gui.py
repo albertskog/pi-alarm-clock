@@ -10,6 +10,11 @@ class Gui(object):
             master.attributes("-fullscreen", True)
         elif operating_system == "Darwin":
             master.geometry('128x160+0+0')
+            master.bind('1', self.key_callback)
+            master.bind('2', self.key_callback)
+            master.bind('3', self.key_callback)
+            master.bind('4', self.key_callback)
+            master.bind('5', self.key_callback)
         else:
             print "Unknown operating system!"
             master.destroy()
@@ -44,6 +49,10 @@ class Gui(object):
                                  foreground="white",
                                  background="black")
         alarm_time_label.place(relx=0.5, rely=0.9, anchor="center")
+
+    def key_callback(self, event):
+        """Callback for keyboard events"""
+        print event.char
 
     def register_callback(self, time_ms, callback):
         """Register a function to be called some time in the future"""

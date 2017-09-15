@@ -15,10 +15,11 @@ class Gui(object):
             master.destroy()
 
         master.configure(background='black')
-
+        master.grid_rowconfigure(0, weight=1)
+        master.grid_columnconfigure(0, weight=1)
         self.frame = Frame(master)
         self.frame.configure(background='black')
-        self.frame.pack()
+        self.frame.grid()
 
         self.alarm_label = Label(self.frame,
                                  text="Alarm",
@@ -32,9 +33,17 @@ class Gui(object):
                            textvariable=self.time_variable,
                            font=("Helvetica", 30, "bold"),
                            foreground="white",
-                           background="black",
-                           height=2)
-        time_label.pack()
+                           background="black")
+        time_label.grid(row=1)
+
+        self.alarm_time_variable = StringVar()
+
+        alarm_time_label = Label(self.frame,
+                                 textvariable=self.alarm_time_variable,
+                                 font=("Helvetica", 20, "bold"),
+                                 foreground="white",
+                                 background="black")
+        alarm_time_label.grid(row=2)
 
     def register_callback(self, time_ms, callback):
         """Register a function to be called some time in the future"""
@@ -44,10 +53,14 @@ class Gui(object):
         """Set contents of time label"""
         self.time_variable.set(time)
 
+    def set_alarm_time(self, time):
+        """Set contents of alarm time label"""
+        self.alarm_time_variable.set(time)
+
     def start_alarm(self):
         """Show the alarm label on screen"""
-        self.alarm_label.pack()
+        self.alarm_label.grid(row=0)
 
     def stop_alarm(self):
         """Remove alarm label from screen"""
-        self.alarm_label.pack_forget()
+        self.alarm_label.grid_forget()

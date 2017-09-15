@@ -5,9 +5,10 @@ class Logic(object):
     """Class for aalrm clock logic"""
     def __init__(self, gui):
         self.gui = gui
-        self.alarm_time = (6, 0)
+        self.set_alarm(6, 0)
         self.alarm_is_active = False
         self.update_time()
+
 
 
     def update_time(self):
@@ -20,6 +21,7 @@ class Logic(object):
     def set_alarm(self, hour, minute):
         """Functions for setting new alarm time"""
         self.alarm_time = (hour, minute)
+        self.gui.set_alarm_time("{h:02d}:{m:02d}".format(h=hour, m=minute))
 
     def check_alarm(self, time):
         """Check if it is time to start the alarm"""

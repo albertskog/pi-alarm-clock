@@ -1,13 +1,17 @@
 """Module implementing the logic of the Pi Alarm Clock"""
 from datetime import datetime
+from buttons import Buttons
 
 class Logic(object):
     """Class for alarm clock logic"""
     def __init__(self, gui):
         self.gui = gui
-        self.set_alarm(6, 0)
+        self.gui.register_button_handler(button_handler)
+        self.buttons = Buttons(button_handler)
+        self.set_alarm(8, 5)
         self.alarm_is_active = False
         self.update_time()
+
 
     def update_time(self):
         """Callback used to update current time in the gui"""
@@ -30,3 +34,7 @@ class Logic(object):
             print "Alarm active"
             self.alarm_is_active = True
             self.gui.start_alarm()
+
+def button_handler(button):
+    """Handler for button events"""
+    print "Button {0} pressed".format(button)

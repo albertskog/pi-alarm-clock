@@ -5,24 +5,20 @@ import platform
 class Gui(object):
     """Class for hanling the ui"""
     def __init__(self, master):
+        self.master = master
         operating_system = platform.system()
         if operating_system == "Linux":
-            master.attributes("-fullscreen", True)
+            self.master.attributes("-fullscreen", True)
         elif operating_system == "Darwin":
-            master.geometry('128x160+0+0')
-            master.bind('1', self.key_callback)
-            master.bind('2', self.key_callback)
-            master.bind('3', self.key_callback)
-            master.bind('4', self.key_callback)
-            master.bind('5', self.key_callback)
+            self.master.geometry('128x160+0+0')
         else:
             print "Unknown operating system!"
-            master.destroy()
+            self.master.destroy()
 
-        master.configure(background="red")
-        master.grid_rowconfigure(0, weight=1)
-        master.grid_columnconfigure(0, weight=1)
-        self.frame = Frame(master)
+        self.master.configure(background="red")
+        self.master.grid_rowconfigure(0, weight=1)
+        self.master.grid_columnconfigure(0, weight=1)
+        self.frame = Frame(self.master)
         self.frame.configure(background="black")
         self.frame.grid(sticky="nsew")
 
@@ -50,9 +46,7 @@ class Gui(object):
                                  background="black")
         alarm_time_label.place(relx=0.5, rely=0.9, anchor="center")
 
-    def key_callback(self, event):
-        """Callback for keyboard events"""
-        print event.char
+        self.button_handler = ""
 
     def register_callback(self, time_ms, callback):
         """Register a function to be called some time in the future"""
@@ -73,3 +67,18 @@ class Gui(object):
     def stop_alarm(self):
         """Remove alarm label from screen"""
         self.alarm_label.grid_forget()
+
+
+    def key_callback(self, event):
+        """Callback for keyboard events"""
+        if self.button_handler:
+            self.button_handler(event.char)
+
+    def register_button_handler(self, button_handler):
+        """Setup handler to receive button events"""
+        self.button_handler = button_handler
+        self.master.bind('1', self.key_callback)
+        self.master.bind('2', self.key_callback)
+        self.master.bind('3', self.key_callback)
+        self.master.bind('4', self.key_callback)
+        self.master.bind('5', self.key_callback)

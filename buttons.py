@@ -31,10 +31,11 @@ class Buttons(object): # pylint: disable=R0903
 
         GPIO.setup(self.buttons.items(), GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-        GPIO.add_event_detect(self.buttons.items(),
-                              GPIO.FALLING,
-                              callback=self.callback,
-                              bouncetime=200)
+        for button in self.buttons.items():
+            GPIO.add_event_detect(button,
+                                  GPIO.FALLING,
+                                  callback=self.callback,
+                                  bouncetime=200)
 
     def callback(self, channel):
         """Button press callback"""

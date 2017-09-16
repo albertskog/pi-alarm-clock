@@ -6,15 +6,15 @@ if platform.system() == "Linux":
 class Buttons(object): # pylint: disable=R0903
     """Button press handler"""
 
-    plus_button = 35
-    minus_button = 33
-    a_button = 31
-    b_button = 29
+    PLUS_BUTTON = 35
+    MINUS_BUTTON = 33
+    A_BUTTON = 31
+    B_BUTTON = 29
 
-    buttons = {"plus_button": plus_button,
-               "minus_button": minus_button,
-               "a_button": a_button,
-               "b_button": b_button}
+    BUTTON_MAP = {MINUS_BUTTON: "-",
+                  PLUS_BUTTON: "+",
+                  A_BUTTON: "a",
+                  B_BUTTON: "b"}
 
     def __init__(self, button_handler):
         if platform.system() != "Linux":
@@ -29,9 +29,9 @@ class Buttons(object): # pylint: disable=R0903
         if io_mode is None:
             GPIO.setmode(GPIO.BOARD)
 
-        GPIO.setup(self.buttons.values(), GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.setup(self.BUTTON_MAP.keys(), GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-        for button in self.buttons.values():
+        for button in self.BUTTON_MAP:
             GPIO.add_event_detect(button,
                                   GPIO.FALLING,
                                   callback=self.callback,
@@ -40,4 +40,4 @@ class Buttons(object): # pylint: disable=R0903
     def callback(self, channel):
         """Button press callback"""
         print channel
-        self.button_handler(channel)
+        self.button_handler(self.BUTTON_MAP[channel])

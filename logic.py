@@ -6,9 +6,9 @@ class Logic(object):
     """Class for alarm clock logic"""
     def __init__(self, gui):
         self.gui = gui
-        self.gui.register_button_handler(button_handler)
-        self.buttons = Buttons(button_handler)
-        self.set_alarm(8, 5)
+        self.gui.register_button_handler(self.button_handler)
+        self.buttons = Buttons(self.button_handler)
+        self.set_alarm(6, 0)
         self.alarm_is_active = False
         self.update_time()
 
@@ -35,6 +35,22 @@ class Logic(object):
             self.alarm_is_active = True
             self.gui.start_alarm()
 
-def button_handler(button):
-    """Handler for button events"""
-    print "Button {0} pressed".format(button)
+    def move_alarm(self, minutes):
+        """Move alarm given number of minutes"""
+        new_hour = self.alarm_time[0]
+        new_minute = self.alarm_time[1] + minutes
+        if new_minute >= 60:
+            new_minute -= 60
+            new_hour += 1
+        if new_minute < 0:
+            new_minute += 60
+            new_hour -= 1
+        self.set_alarm(new_hour, new_minute)
+
+    def button_handler(self, button):
+        """Handler for button events"""
+        print "Button {0} pressed".format(button)
+        if button == "+":
+            self.move_alarm(minutes=15)
+        if button == "-":
+            self.move_alarm(minutes=-15)

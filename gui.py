@@ -4,6 +4,9 @@ import platform
 
 class Gui(object):
     """Class for hanling the ui"""
+
+    BUTTON_MAP = {"1": "-", "2": "+", "3": "a", "4": "b", "5": "c"}
+
     def __init__(self, master):
         self.master = master
         operating_system = platform.system()
@@ -72,7 +75,7 @@ class Gui(object):
     def key_callback(self, event):
         """Callback for keyboard events"""
         if self.button_handler:
-            self.button_handler(event.char)
+            self.button_handler(self.BUTTON_MAP[event.char])
 
     def register_button_handler(self, button_handler):
         """Setup handler to receive button events"""

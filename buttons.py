@@ -29,9 +29,9 @@ class Buttons(object): # pylint: disable=R0903
         if io_mode is None:
             GPIO.setmode(GPIO.BOARD)
 
-        GPIO.setup(self.buttons.items(), GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.setup(self.buttons.values(), GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-        for button in self.buttons.items():
+        for button in self.buttons.values():
             GPIO.add_event_detect(button,
                                   GPIO.FALLING,
                                   callback=self.callback,

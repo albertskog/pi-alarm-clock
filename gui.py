@@ -27,7 +27,7 @@ class Gui(object):
 
         self.alarm_label = Label(self.frame,
                                  text="Alarm",
-                                 font=("Helvetica", 30, "bold"),
+                                 font=("Helvetica", 30),
                                  foreground="white",
                                  background="black")
 
@@ -35,7 +35,7 @@ class Gui(object):
 
         time_label = Label(self.frame,
                            textvariable=self.time_variable,
-                           font=("Helvetica", 30, "bold"),
+                           font=("Helvetica", 50),
                            foreground="white",
                            background="black")
         time_label.place(relx=0.5, rely=0.5, anchor="center")
@@ -44,7 +44,7 @@ class Gui(object):
 
         alarm_time_label = Label(self.frame,
                                  textvariable=self.alarm_time_variable,
-                                 font=("Helvetica", 20, "bold"),
+                                 font=("Helvetica", 20),
                                  foreground="white",
                                  background="black")
         alarm_time_label.place(relx=0.5, rely=0.9, anchor="center")

@@ -5,13 +5,17 @@ from backlight import Backlight
 
 class Logic(object):
     """Class for alarm clock logic"""
+
+    time_increment = 1
+
     def __init__(self, gui):
         self.gui = gui
         self.gui.register_button_handler(self.button_handler)
         self.buttons = Buttons(self.button_handler)
         self.backlight = Backlight()
-        self.set_alarm(6, 0)
+        self.set_alarm(21, 03)
         self.alarm_is_active = False
+        self.alarm_is_enabled = True
         self.update_time()
 
 
@@ -32,6 +36,12 @@ class Logic(object):
         if self.alarm_is_active:
             return
 
+        if not self.alarm_is_enabled:
+            if self.alarm_time != (time.hour, time.minute):
+                print "Automatic enable alarm"
+                self.alarm_is_enabled = True
+            return
+
         if self.alarm_time == (time.hour, time.minute):
             print "Alarm active"
             self.alarm_is_active = True
@@ -50,10 +60,33 @@ class Logic(object):
             new_hour -= 1
         self.set_alarm(new_hour, new_minute)
 
+    def toggle_alarm(self):
+        """Turn off alarm if it is active"""
+        if self.alarm_is_active:
+            self.backlight.set_brightness(3)
+            self.gui.stop_alarm()
+            self.alarm_is_enabled = False
+            self.alarm_is_active = False
+            print "Stopped alarm"
+            return
+
+        # if self.alarm_is_enabled:
+        #     print "Disable alarm"
+        #     self.alarm_is_enabled = False
+        #     self.gui.set_alarm_time("--:--")
+        # else:
+        #     print "Enable alarm"
+        #     self.alarm_is_enabled = True
+        #     time = "{h:02d}:{m:02d}".format(h=self.alarm_time[0],
+        #                                     m=self.alarm_time[1])
+        #     self.gui.set_alarm_time(time)
+
     def button_handler(self, button):
         """Handler for button events"""
         print "Button {0} pressed".format(button)
         if button == "+":
-            self.move_alarm(minutes=15)
+            self.move_alarm(minutes=self.time_increment)
         if button == "-":
-            self.move_alarm(minutes=-15)
+            self.move_alarm(minutes=-self.time_increment)
+        if button == "a":
+            self.toggle_alarm()

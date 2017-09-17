@@ -69,8 +69,7 @@ class Gui(object):
 
     def stop_alarm(self):
         """Remove alarm label from screen"""
-        self.alarm_label.grid_forget()
-
+        self.alarm_label.place_forget()
 
     def key_callback(self, event):
         """Callback for keyboard events"""

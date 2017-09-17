@@ -27,6 +27,8 @@ class Backlight(object): # pylint: disable=R0903
 
     def set_brightness(self, brightness_percent):
         """Set backlight."""
-        if self.backlight:
+        try:
             self.backlight.ChangeDutyCycle(brightness_percent)
+        except AttributeError:
+            pass
         print "Set backlight: {0}%".format(brightness_percent)

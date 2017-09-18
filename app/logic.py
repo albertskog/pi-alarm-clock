@@ -1,19 +1,21 @@
 """Module implementing the logic of the Pi Alarm Clock"""
 from datetime import datetime
-from buttons import Buttons
-from backlight import Backlight
+from app.buttons import Buttons
+from app.backlight import Backlight
+from app.sound import Sound
 
 class Logic(object):
     """Class for alarm clock logic"""
 
-    time_increment = 1
+    time_increment = 15
 
     def __init__(self, gui):
         self.gui = gui
         self.gui.register_button_handler(self.button_handler)
         self.buttons = Buttons(self.button_handler)
         self.backlight = Backlight()
-        self.set_alarm(21, 03)
+        self.sound = Sound()
+        self.set_alarm(6, 0)
         self.alarm_is_active = False
         self.alarm_is_enabled = True
         self.update_time()
@@ -46,6 +48,7 @@ class Logic(object):
             print "Alarm active"
             self.alarm_is_active = True
             self.backlight.set_brightness(100)
+            self.sound.start()
             self.gui.start_alarm()
 
     def move_alarm(self, minutes):
@@ -63,6 +66,7 @@ class Logic(object):
     def toggle_alarm(self):
         """Turn off alarm if it is active"""
         if self.alarm_is_active:
+            self.sound.stop()
             self.backlight.set_brightness(3)
             self.gui.stop_alarm()
             self.alarm_is_enabled = False

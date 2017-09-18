@@ -1,7 +1,7 @@
 """Main script for Pi Alarm Clock"""
 from Tkinter import Tk
-from gui import Gui
-from logic import Logic
+from app.gui import Gui
+from app.logic import Logic
 
 if __name__ == '__main__':
 

@@ -39,5 +39,4 @@ class Buttons(object): # pylint: disable=R0903
 
     def callback(self, channel):
         """Button press callback"""
-        print channel
         self.button_handler(self.BUTTON_MAP[channel])

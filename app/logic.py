@@ -1,5 +1,5 @@
 """Module implementing the logic of the Pi Alarm Clock"""
-from datetime import datetime
+from datetime import datetime, timedelta
 from app.buttons import Buttons
 from app.backlight import Backlight
 from app.sound import Sound
@@ -19,7 +19,6 @@ class Logic(object):
         self.alarm_is_active = False
         self.alarm_is_enabled = True
         self.update_time()
-
 
     def update_time(self):
         """Callback used to update current time in the gui"""
@@ -44,9 +43,11 @@ class Logic(object):
             return
 
         if not self.alarm_is_enabled:
-            if self.alarm_time != (time.hour, time.minute):
+            enable_time = add_minutes(self.alarm_time, 1)
+            if enable_time == (time.hour, time.minute):
                 print "Automatic enable alarm"
                 self.alarm_is_enabled = True
+                self.gui.enable_alarm()
             return
 
         if self.alarm_time == (time.hour, time.minute):
@@ -58,14 +59,7 @@ class Logic(object):
 
     def move_alarm(self, minutes):
         """Move alarm given number of minutes"""
-        new_hour = self.alarm_time[0]
-        new_minute = self.alarm_time[1] + minutes
-        if new_minute >= 60:
-            new_minute -= 60
-            new_hour += 1
-        if new_minute < 0:
-            new_minute += 60
-            new_hour -= 1
+        (new_hour, new_minute) = add_minutes(self.alarm_time, minutes)
         self.set_alarm(new_hour, new_minute)
 
     def toggle_alarm(self):
@@ -79,16 +73,14 @@ class Logic(object):
             print "Stopped alarm"
             return
 
-        # if self.alarm_is_enabled:
-        #     print "Disable alarm"
-        #     self.alarm_is_enabled = False
-        #     self.gui.set_alarm_time("--:--")
-        # else:
-        #     print "Enable alarm"
-        #     self.alarm_is_enabled = True
-        #     time = "{h:02d}:{m:02d}".format(h=self.alarm_time[0],
-        #                                     m=self.alarm_time[1])
-        #     self.gui.set_alarm_time(time)
+        if self.alarm_is_enabled:
+            print "Disable alarm"
+            self.alarm_is_enabled = False
+            self.gui.disable_alarm()
+        else:
+            print "Enable alarm"
+            self.alarm_is_enabled = True
+            self.gui.enable_alarm()
 
     def button_handler(self, button):
         """Handler for button events"""
@@ -99,3 +91,15 @@ class Logic(object):
             self.move_alarm(minutes=-self.time_increment)
         if button == "a":
             self.toggle_alarm()
+
+def add_minutes(old_time, minutes_to_add):
+    """Add given amount of time, handling hour/minute overflow"""
+    new_hour = old_time[0]
+    new_minute = old_time[1] + minutes_to_add
+    if new_minute >= 60:
+        new_minute -= 60
+        new_hour += 1
+    if new_minute < 0:
+        new_minute += 60
+        new_hour -= 1
+    return (new_hour, new_minute)

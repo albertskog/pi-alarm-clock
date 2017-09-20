@@ -42,12 +42,12 @@ class Gui(object):
 
         self.alarm_time_variable = StringVar()
 
-        alarm_time_label = Label(self.frame,
-                                 textvariable=self.alarm_time_variable,
-                                 font=("Helvetica", 20),
-                                 foreground="white",
-                                 background="black")
-        alarm_time_label.place(relx=0.5, rely=0.9, anchor="center")
+        self.alarm_time_label = Label(self.frame,
+                                      textvariable=self.alarm_time_variable,
+                                      font=("Helvetica", 30),
+                                      foreground="white",
+                                      background="black")
+        self.alarm_time_label.place(relx=0.5, rely=0.9, anchor="center")
 
         self.button_handler = ""
 
@@ -70,6 +70,16 @@ class Gui(object):
     def stop_alarm(self):
         """Remove alarm label from screen"""
         self.alarm_label.place_forget()
+
+    def disable_alarm(self):
+        """Show alarm as disabled"""
+        self.alarm_time_label.configure(foreground="red",
+                                        font=("Helvetica", 30, "overstrike"))
+
+    def enable_alarm(self):
+        """Show alarm as enabled"""
+        self.alarm_time_label.configure(foreground="white",
+                                        font=("Helvetica", 30))
 
     def key_callback(self, event):
         """Callback for keyboard events"""

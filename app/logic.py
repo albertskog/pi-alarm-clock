@@ -35,6 +35,11 @@ class Logic(object):
 
     def check_alarm(self, time):
         """Check if it is time to start the alarm"""
+        weekend = [5, 6]
+        if datetime.now().weekday() in weekend:
+            # No alarm on weekends
+            return
+
         if self.alarm_is_active:
             return
 

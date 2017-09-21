@@ -1,5 +1,5 @@
 """Module implementing the logic of the Pi Alarm Clock"""
-from datetime import datetime, timedelta
+from datetime import datetime
 from app.buttons import Buttons
 from app.backlight import Backlight
 from app.sound import Sound

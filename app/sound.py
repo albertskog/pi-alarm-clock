@@ -34,6 +34,7 @@ class Sound(object):
 
 def play_alarm_linux(stop_event):
     """Play the alarm sound untill stopped."""
+    print "play sound"
     proc = subprocess.Popen(["omxplayer",
                              "--loop",
                              "--vol",
@@ -43,11 +44,12 @@ def play_alarm_linux(stop_event):
                             stdin=subprocess.PIPE,
                             stderr=subprocess.PIPE)
 
-    start_time = time.time()
+    last_volume_increase_time = time.time()
     while not stop_event.is_set():
         time.sleep(0)
 
-        if time.time() - start_time % 10 == 0:
+        if time.time() - last_volume_increase_time >= 10:
+            last_volume_increase_time = time.time()
             proc.stdin.write('+')
 
     proc.stdin.write('q')

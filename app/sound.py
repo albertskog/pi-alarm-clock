@@ -34,7 +34,7 @@ class Sound(object):
 
 def play_alarm_linux(stop_event):
     """Play the alarm sound untill stopped."""
-    print "play sound"
+
     proc = subprocess.Popen(["omxplayer",
                              "--loop",
                              "--vol",

@@ -1,13 +1,16 @@
 """Module implementing the logic of the Pi Alarm Clock"""
 from datetime import datetime
+from config import CONFIG
 from app.buttons import Buttons
 from app.backlight import Backlight
 from app.sound import Sound
+from app.smart_home import SmartHome
 
 class Logic(object):
     """Class for alarm clock logic"""
 
-    time_increment = 15
+    alarm_is_active = False
+    alarm_is_enabled = True
 
     def __init__(self, gui):
         self.gui = gui
@@ -15,10 +18,13 @@ class Logic(object):
         self.buttons = Buttons(self.button_handler)
         self.backlight = Backlight()
         self.sound = Sound()
-        self.set_alarm(6, 0)
-        self.alarm_is_active = False
-        self.alarm_is_enabled = True
+
+        self.set_alarm(CONFIG["alarm_time"][0], CONFIG["alarm_time"][1])
         self.update_time()
+
+        self.smart_home = SmartHome()
+        event = {"event": "started", "alarm_time": self.alarm_time}
+        self.smart_home.send_event(event)
 
     def update_time(self):
         """Callback used to update current time in the gui"""
@@ -85,12 +91,24 @@ class Logic(object):
     def button_handler(self, button):
         """Handler for button events"""
         print "Button {0} pressed".format(button)
+
         if button == "+":
-            self.move_alarm(minutes=self.time_increment)
-        if button == "-":
-            self.move_alarm(minutes=-self.time_increment)
-        if button == "a":
+            self.move_alarm(minutes=CONFIG["time_increment"])
+        elif button == "-":
+            self.move_alarm(minutes=-CONFIG["time_increment"])
+        elif button == "a":
             self.toggle_alarm()
+        elif button == "b":
+            pass
+        else:
+            return
+
+        event = {"event": "button",
+                 "button": button,
+                 "alarm_time": self.alarm_time,
+                 "alarm_is_enabled": self.alarm_is_enabled,
+                 "alarm_is_active": self.alarm_is_active}
+        self.smart_home.send_event(event)
 
 def add_minutes(old_time, minutes_to_add):
     """Add given amount of time, handling hour/minute overflow"""

@@ -22,7 +22,7 @@ class Logic(object):
         self.set_alarm(CONFIG["alarm_time"][0], CONFIG["alarm_time"][1])
         self.update_time()
 
-        self.smart_home = SmartHome()
+        self.smart_home = SmartHome(self.command_handler)
         event = {"event": "started", "alarm_time": self.alarm_time}
         self.smart_home.send_event(event)
 
@@ -105,6 +105,19 @@ class Logic(object):
 
         event = {"event": "button",
                  "button": button,
+                 "alarm_time": self.alarm_time,
+                 "alarm_is_enabled": self.alarm_is_enabled,
+                 "alarm_is_active": self.alarm_is_active}
+        self.smart_home.send_event(event)
+
+    def command_handler(self, command):
+        """Handler for incoming commands"""
+        if command["command"] == "move_alarm":
+            self.move_alarm(minutes=command["time_delta"])
+        if command["command"] == "toggle_alarm":
+            self.toggle_alarm()
+
+        event = {"event": "command_complete",
                  "alarm_time": self.alarm_time,
                  "alarm_is_enabled": self.alarm_is_enabled,
                  "alarm_is_active": self.alarm_is_active}

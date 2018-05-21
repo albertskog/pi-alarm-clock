@@ -54,6 +54,11 @@ class Logic(object):
                 print "Automatic enable alarm"
                 self.alarm_is_enabled = True
                 self.gui.enable_alarm()
+                event = {"event": "state",
+                         "alarm_time": self.alarm_time,
+                         "alarm_is_enabled": self.alarm_is_enabled,
+                         "alarm_is_active": self.alarm_is_active}
+                self.smart_home.send_event(event)
             return
 
         if self.alarm_time == (time.hour, time.minute):

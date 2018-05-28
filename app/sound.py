@@ -48,6 +48,18 @@ def play_alarm_linux(stop_event):
     while not stop_event.is_set():
         time.sleep(0)
 
+        # Check if sound process has stopped for some reason and play backup-sound
+        if proc.poll() is not None:
+            print("Failed to play sound file, playing tone instead...")
+            proc = subprocess.Popen(["speaker-test",
+                                     "-tsine",
+                                     "-l1",
+                                     "-f300",
+                                     "-Dhw:ALSA"],
+                                    stdout=subprocess.PIPE,
+                                    stdin=subprocess.PIPE,
+                                    stderr=subprocess.PIPE)
+
         if time.time() - last_volume_increase_time >= 10:
             last_volume_increase_time = time.time()
             proc.stdin.write('+')

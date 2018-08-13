@@ -1,28 +1,34 @@
-"""Smart home integration module"""
+"""Smart home integration module."""
 import json
 from paho.mqtt import client as mqtt
 from config import CONFIG
 
+
 class SmartHome(object):
-    """MQTT connection abstraction"""
+    """MQTT connection abstraction."""
+
     def __init__(self, command_callback):
+        """Initialize connection to MQTT broker."""
         self.client = mqtt.Client()
         self.command_callback = command_callback
-        self.client.connect(CONFIG["broker"])
         self.client.on_connect = self.on_connect
         self.client.on_message = self.on_message
-        self.client.loop_start()
+        try:
+            self.client.connect(CONFIG["broker"])
+            self.client.loop_start()
+        except:
+            print("MQTT broker not found")
 
     def on_connect(self, client, userdata, flags, result_code):
-        """Callback for start of MQTT connection"""
+        """Callback for start of MQTT connection."""
         del client, userdata, flags, result_code
         self.client.subscribe(CONFIG["incoming_topic"])
 
     def on_message(self, client, userdata, msg):
-        """Callback for incoming commands"""
+        """Callback for incoming commands."""
         del client, userdata
         self.command_callback(json.loads(msg.payload))
 
     def send_event(self, event):
-        """Publish state to broker"""
+        """Publish state to broker."""
         self.client.publish(CONFIG["outgoing_topic"], json.dumps(event))

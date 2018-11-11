@@ -3,6 +3,8 @@ CONFIG = {
     "alarm_time": (6, 0),
     "time_increment": 15,
     "broker": "hassio.local",
+    "username": "user",
+    "password": "pass",
     "outgoing_topic": "alarm_clock",
     "incoming_topic": "alarm_clock/command",
 }

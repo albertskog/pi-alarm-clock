@@ -14,7 +14,8 @@ class SmartHome(object):
         self.client.on_connect = self.on_connect
         self.client.on_message = self.on_message
         try:
-            self.client.connect(CONFIG["broker"])
+            self.client.username_pw_set(username=CONFIG["username"], password=CONFIG["password"])
+            self.client.connect(CONFIG["broker"], )
             self.client.loop_start()
         except:
             print("MQTT broker not found")
